@@ -14,6 +14,8 @@ import * as React from 'react';
 import { useState } from 'react';
 import { categories } from '../utils/categories';
 import { addEntry } from '../utils/mutations';
+import { editEntry } from '../utils/mutations';
+import { deleteEntry } from '../utils/mutations';
 
 // Modal component for individual entries.
 
@@ -67,8 +69,37 @@ export default function EntryModal({ entry, type, user }) {
    };
 
    // TODO: Add Edit Mutation Handler
+   const handleEdit = () => {
+      const editedEntry = {
+         name: name,
+         link: link,
+         description: description,
+         user: user?.displayName ? user?.displayName : "GenericUser",
+         category: category,
+         id: entry.id,
+         userid: user?.uid,
+      };
+
+      editEntry(editedEntry).catch(console.error);
+      handleClose();
+   };
 
    // TODO: Add Delete Mutation Handler
+   const handleDelete = () => {
+      const deletedEntry = {
+         name: name,
+         link: link,
+         description: description,
+         user: user?.displayName ? user?.displayName : "GenericUser",
+         category: category,
+         id: entry.id,
+         userid: user?.uid,
+      };
+
+      deleteEntry(deletedEntry).catch(console.error);
+      handleClose();
+   };
+
 
    // Button handlers for modal opening and inside-modal actions.
    // These buttons are displayed conditionally based on if adding or editing/opening.
@@ -82,18 +113,43 @@ export default function EntryModal({ entry, type, user }) {
             Add entry
          </Button>
             : null;
-
+   
    const actionButtons =
-      type === "edit" ?
+   type === "edit" ?
+      <DialogActions>
+         <Button onClick={handleClose}>Cancel</Button>
+      </DialogActions>
+      : type === "add" ?
          <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
+            <Button variant="contained" onClick={handleAdd}>Add Entry</Button>
          </DialogActions>
-         : type === "add" ?
-            <DialogActions>
-               <Button onClick={handleClose}>Cancel</Button>
-               <Button variant="contained" onClick={handleAdd}>Add Entry</Button>
-            </DialogActions>
-            : null;
+         : null;
+
+   // Edit button
+   const editButton =
+   type === "edit" ?
+      <DialogActions>
+         <Button onClick={handleEdit}>Edit</Button>
+      </DialogActions>
+      : type === "edit" ?
+         <DialogActions>
+            <Button variant="contained" onClick={handleEdit}>Edit</Button>
+         </DialogActions>
+         : null;
+
+   // Delete button
+   const deleteButton =
+   type === "edit" ?
+      <DialogActions>
+         <Button onClick={handleDelete}>Delete</Button>
+      </DialogActions>
+      : type === "edit" ?
+         <DialogActions>
+            <Button onClick={handleDelete}>Delete</Button>
+         </DialogActions>
+         : null;
+   
 
    return (
       <div>
@@ -146,7 +202,11 @@ export default function EntryModal({ entry, type, user }) {
                   </Select>
                </FormControl>
             </DialogContent>
-            {actionButtons}
+            <div style={{ display: "flex"}}>
+               {editButton}
+               {deleteButton} 
+               {actionButtons}
+            </div>   
          </Dialog>
       </div>
    );

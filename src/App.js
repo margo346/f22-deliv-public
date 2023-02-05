@@ -123,6 +123,9 @@ export default function App() {
   }, [currentUser]);
 
   // Main content of homescreen. This is displayed conditionally from user auth status
+ 
+  // entries = entries.filter(category => );
+// will return your booleans 
 
   function mainContent() {
     if (isSignedIn) {

@@ -8,41 +8,75 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import EntryModal from './EntryModal';
 import { getCategory } from '../utils/categories';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
-// Table component that displays entries on home screen
+// Table component that displays entries on home screen 
 
 export default function EntryTable({ entries }) {
+   // display the dropdown
+
+   // define a function for filter entries
+
+      const handleFilter = (e) => {
+         console.log("being called")
+      }
+
+   // look up how to filter through arrays using javascript
+
    return (
-      <TableContainer component={Paper}>
-         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-               <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell align="right">Link</TableCell>
-                  <TableCell align="right">User</TableCell>
-                  <TableCell align="right">Category</TableCell>
-                  <TableCell align="right">Open</TableCell>
-               </TableRow>
-            </TableHead>
-            <TableBody>
-               {entries.map((entry) => (
-                  <TableRow
-                     key={entry.id}
-                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                     <TableCell component="th" scope="row">
-                        {entry.name}
-                     </TableCell>
-                     <TableCell align="right"><Link href={entry.link}>{entry.link}</Link></TableCell>
-                     <TableCell align="right">{entry.user}</TableCell>
-                     <TableCell align="right">{getCategory(entry.category).name}</TableCell>
-                     <TableCell sx={{ "padding-top": 0, "padding-bottom": 0 }} align="right">
-                        <EntryModal entry={entry} type="edit" />
-                     </TableCell>
+      <div>
+         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+         <InputLabel id="demo-simple-select-label">Filter by</InputLabel>
+         <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            defaultValue="Default"
+            value={entries.category}
+            label="Filter by"
+            onChange={handleFilter}
+         >
+
+            <MenuItem value="Default">Default</MenuItem>
+            <MenuItem value="Nonprofit">Nonprofit</MenuItem>
+            <MenuItem value="Startup">Startup</MenuItem>
+            <MenuItem value="Misc">Misc</MenuItem>
+         </Select>
+         </FormControl>
+         
+         <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+               <TableHead>
+                  <TableRow>
+                     <TableCell>Name</TableCell>
+                     <TableCell align="right">Link</TableCell>
+                     <TableCell align="right">User</TableCell>
+                     <TableCell align="right">Category</TableCell>
+                     <TableCell align="right">Open</TableCell>
                   </TableRow>
-               ))}
-            </TableBody>
-         </Table>
-      </TableContainer>
+               </TableHead>
+               <TableBody>
+                  {entries.map((entry) => (
+                     <TableRow
+                        key={entry.id}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                     >
+                        <TableCell component="th" scope="row">
+                           {entry.name}
+                        </TableCell>
+                        <TableCell align="right"><Link href={entry.link}>{entry.link}</Link></TableCell>
+                        <TableCell align="right">{entry.user}</TableCell>
+                        <TableCell align="right">{getCategory(entry.category).name}</TableCell>
+                        <TableCell sx={{ "padding-top": 0, "padding-bottom": 0 }} align="right">
+                           <EntryModal entry={entry} type="edit" />
+                        </TableCell>
+                     </TableRow>
+                  ))}
+               </TableBody>
+            </Table>
+         </TableContainer>
+      </div>
    );
 }
